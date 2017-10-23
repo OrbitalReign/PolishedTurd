@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "poo.h"
 #include "Level.h"
+#include "MapBuilder.h"
 
 
 class Game
@@ -47,12 +48,14 @@ private:
 	int ClampScreenY( int y,int height );
 	bool IsColliding( int x0,int y0,int width0,int height0,
 		int x1,int y1,int width1,int height1 );
+
 	/********************************/
 private:
 	MainWindow& wnd;
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	Mapbuilder MapEdit;
 	int dudeX = 400;
 	int dudeY = 300;
 	int dudeWidth = 20;
@@ -71,5 +74,9 @@ private:
     Vec2 A;
 	Vec2 B;
 	Vec2 C;
+	////////////// map builder //////////////
+
+
+	/////////////////////////////////////////
 	/********************************/
 };
