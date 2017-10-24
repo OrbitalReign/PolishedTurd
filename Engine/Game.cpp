@@ -49,7 +49,7 @@ Game::Game( MainWindow& wnd )
 	poo1.vy = -1;
 	poo2.vx = 1;
 	poo2.vy = 1;
-
+	MapEdit.ColourPalletSet();
 
 
 }
@@ -64,7 +64,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	//// test /////
+	/*//// test /////
    std::ifstream in("L1Blocks.txt");
    if (!in)
    {
@@ -74,6 +74,7 @@ void Game::UpdateModel()
    //std::ofstream out("L1Blocks.txt" , std::iostream::binary);
    //std::ofstream::write out(reinterpret_cast<char> &thing , size_of(thing) );
 
+   */
 
 	///////////////
 	if( isStarted )
@@ -129,7 +130,9 @@ void Game::UpdateModel()
 		}
 	}
 	/////////////// map builder //////////////////
+	
 	MapEdit.MapBuilderUI_Keys(wnd);
+
 	/////////////////////////////////////////////
 }
 
@@ -29090,24 +29093,8 @@ void Game::ComposeFrame()
 	
 	
 	
-		Color bev_col(150u, 150u, 100u);
-		int blockwidth = 20;
-		Vec2 temp_A = A;
-		Vec2 temp_B = B;
-		for (int y = 0; y < gfx.ScreenHeight   ; y += blockwidth)
-		{		
-			for (int x = 0; x < gfx.ScreenWidth; x += blockwidth)
-			{				
-				gfx.Drawrecbeveled(temp_A, temp_B, 2, bev_col);
-				temp_A.x = (float)x;
-				temp_B.x = (float)x + blockwidth;
-			}
-			    temp_A.y = (float)y;
-				temp_B.y = (float)y + blockwidth;
-				temp_A.x = 0;
-				temp_B.x = 20;	
-	    }
-	
+		
+	/*
 		Level1.BlockLayer();
 		int index = 0;
 		for (int i = 0; i <= 10; ++i)
@@ -29119,7 +29106,7 @@ void Game::ComposeFrame()
 				Level1.Get_Block_Col(index));
 			index++;
 		}
-		
+		*/
 	////////////////////////////
 ////////// map builder //////////////////////
 	MapEdit.MapBuilderUI_Graphics(gfx);
