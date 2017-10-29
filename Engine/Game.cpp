@@ -49,7 +49,7 @@ Game::Game( MainWindow& wnd )
 	poo1.vy = -1;
 	poo2.vx = 1;
 	poo2.vy = 1;
-	MapEdit.ColourPalletSet();
+	
 
 
 }
@@ -29090,10 +29090,7 @@ bool Game::IsColliding( int x0,int y0,int width0,int height0,
 void Game::ComposeFrame()
 {
 	////////// test //////////
-	
-	
-	
-		
+			
 	/*
 		Level1.BlockLayer();
 		int index = 0;
@@ -29110,6 +29107,7 @@ void Game::ComposeFrame()
 	////////////////////////////
 ////////// map builder //////////////////////
 	MapEdit.MapBuilderUI_Graphics(gfx);
+
 ////////////////////////////////////////////
 	if( !isStarted )
 	{

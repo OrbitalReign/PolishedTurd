@@ -308,6 +308,20 @@ void Graphics::BeginFrame()
 	memset( pSysBuffer,0u,sizeof( Color ) * Graphics::ScreenHeight * Graphics::ScreenWidth );
 }
 
+void Graphics::DrawRecFrame(const Vec2 & UL, const Vec2 & BR, Color c)
+{
+	for (int y = (int)UL.y; y <= BR.y; y++)
+	{
+		PutPixel((int)UL.x, y, c);
+		PutPixel((int)BR.x, y, c);
+	}
+	for (int x = (int)UL.x + 1; x <= BR.x - 1; x++)
+	{
+		PutPixel(x, (int)UL.y, c);
+		PutPixel(x, (int)BR.y, c);
+	}
+}
+
 void Graphics::Drawrec(const Vec2 & top_left, const Vec2 & bottom_right, Color c)
 {
 	for (int y = (int)top_left.y; y <= bottom_right.y ; y++ )
@@ -330,7 +344,7 @@ void Graphics::Drawrec(const float Lx, const float Rx, const float Ty, const flo
 	}
 }
 
-void Graphics::Drawrecbeveled(const Vec2 & Point_a, const Vec2 & Point_b, const float & Bev_width, Color c)
+void Graphics::Drawrecbeveled(const Vec2 & Point_a, const Vec2 & Point_b, const float& Bev_width, Color c)
 { 
 	
 	Color Top = Scaler(c, 1.3f);
