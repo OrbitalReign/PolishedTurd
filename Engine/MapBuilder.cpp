@@ -85,13 +85,13 @@ void Mapbuilder::MapBuilderUI_Keys(MainWindow& wnd)
 	    Mouse_y = wnd.mouse.GetPosY();
 	    ///////////////////////////
 		if (!Colourpallet &&
-				!blockBevelsize &&
-				MouseCatch &&
-				!TempULSet &&
-				Mouse_x > 0 &&
-				Mouse_x < Graphics::ScreenWidth &&
-				Mouse_y > 0 &&
-				Mouse_y < Graphics::ScreenHeight)
+			!blockBevelsize &&
+			MouseCatch &&
+			!TempULSet &&
+			Mouse_x > 0 &&
+			Mouse_x < Graphics::ScreenWidth &&
+			Mouse_y > 0 &&
+			Mouse_y < Graphics::ScreenHeight)
 	    {
 			TempUL.x = (float)Mouse_x;
 			TempUL.y = (float)Mouse_y;
@@ -163,6 +163,7 @@ void Mapbuilder::MapBuilderUI_Keys(MainWindow& wnd)
 
 void Mapbuilder::MapBuilderUI_Graphics( Graphics& gfx)
 {
+	BaseBack(gfx);
 	MapBuilder_TempLevel(gfx);
 	ColourPallet(gfx);
 	ColourSlider(gfx);
@@ -193,6 +194,55 @@ void Mapbuilder::ColourSelect()
 	selectedColour = ColourPalletArray[ArrayGet];
 	TempColour = selectedColour;
 }
+
+void Mapbuilder::BaseBack(Graphics & gfx)
+{
+	Vec2 temp_A{ 0, 0 };
+	Vec2 temp_B{ 19,19 };
+	int index = 0;
+
+	///////////////////////////////////
+	unsigned char rM = 0u;
+	unsigned char gM = 0u;
+	unsigned char bM = 0u;
+	///////////////////////////////////
+	float rMod = 0;
+	float gMod = 0;
+	float bMod = 0;
+	///////////////////////////////////
+	///////////////////////////
+	for (int y = blockwidth; y <= Graphics::ScreenHeight; y += blockwidth)
+	{
+		for (int x = blockwidth; x <= Graphics::ScreenWidth; x += blockwidth)
+		{
+			gfx.Drawrecbeveled(temp_A, temp_B, 2, Color(rM , gM ,bM) );
+			temp_A.x = (float)x + 1;
+			temp_B.x = (float)x + blockwidth - 1;
+			index++;
+			if (index < 600)
+			{
+			
+				rMod += r / 1000;
+				gMod += g / 1000;
+				bMod += b / 1000;
+			}
+			else
+			{
+				rMod -= r / 1000;
+				gMod -= g / 1000;
+				bMod -= b / 1000;
+			}
+			rM = (unsigned char)rMod;
+			gM = (unsigned char)gMod;
+			bM = (unsigned char)bMod;
+		}
+		temp_A.y = (float)y + 1;
+		temp_B.y = (float)y + blockwidth - 1;
+		temp_A.x = 0.0f;
+		temp_B.x = (float)blockwidth - 1;
+	}
+}
+
 
 void Mapbuilder::ColourPalletSet()
 {

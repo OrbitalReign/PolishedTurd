@@ -15,6 +15,7 @@ public:
 	/////////////////////////
 private:
 	/////////////////////////
+	void BaseBack(class Graphics& gfx);
 	void ColourPalletSet();
 	void ColourSelect();	
 	void ColourPallet(class Graphics& gfx);
@@ -54,9 +55,9 @@ private:
 	Vec2 BlockPreview{ 300.0f , 50.0f };
 	Vec2 BlockPreviewSize{ 400.0f , 150.0f };
 	///////////////////////
-	Vec2 RedSet{ 50, 300};
-	Vec2 GreenSet{ 100, 300 };
-	Vec2 BlueSet{ 150 , 300 };
+	Vec2 RedSet{ 50, 350};
+	Vec2 GreenSet{ 100, 350 };
+	Vec2 BlueSet{ 150 , 350 };
 	Vec2 outline_UL{ 49 , 299 };
 	Vec2 outline_BR{ 171 , 576 };
 	///////////////////////
