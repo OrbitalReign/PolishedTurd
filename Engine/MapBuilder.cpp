@@ -4,63 +4,28 @@
 
 void Mapbuilder::MapBuilderUI_Keys(MainWindow& wnd)
 {
-	if (wnd.kbd.KeyIsPressed('C'))
-	{
-		Colourpallet = true;
-	}
-	else
-	{
-		Colourpallet = false;
-	}
-	//////////////////////////
-	if (wnd.kbd.KeyIsPressed('B'))
-	{
-		blockBevelsize = true;
-	}
-	else
-	{
-		blockBevelsize = false;
-	}
-	/////////////////////////
-	if (wnd.kbd.KeyIsPressed('M'))
-	{
-		maskselect = true;
-	}
-	else
-	{
-		maskselect = false;
-	}
-	/////////////////////////
-	if (wnd.kbd.KeyIsPressed('E'))
-	{
-		enemys = true;
-	}
-	else
-	{
-		enemys = false;
-	}
-	/////////////////////////
-	if (wnd.kbd.KeyIsPressed('P'))
-	{
-		powerups = true;
-	}
-	else
-	{
-	    powerups = false;
-	}
-	/////////////////////////
-	if (wnd.kbd.KeyIsPressed('G'))
-	{
-		Grid = true;
-	}
-	else
-	{
-		Grid = false;
-	}
 	////////////////////////
-	if (wnd.kbd.KeyIsPressed(VK_RETURN) && !ReturnCatch)
+
+	Colourpallet = wnd.kbd.KeyIsPressed('C');
+	blockBevelsize = wnd.kbd.KeyIsPressed('B');
+	maskselect = wnd.kbd.KeyIsPressed('M');	
+	enemys = wnd.kbd.KeyIsPressed('E');
+	powerups = wnd.kbd.KeyIsPressed('P');
+	Grid = wnd.kbd.KeyIsPressed('G');
+	DeleteBack = wnd.kbd.KeyIsPressed('D');
+	if (wnd.kbd.KeyIsPressed('S'))
 	{
-		
+		BaseDraw = false;
+		BackColourLayer.clear();
+		BackBlockLayerUL.clear();
+		BackBlockLayerBR.clear();
+		BackBevelLayer.clear();
+		BaseSet = true;
+	}
+
+	//////////////////////// save blocks in layers
+	if (wnd.kbd.KeyIsPressed(VK_RETURN) && !ReturnCatch)
+	{		
 		TempBlockLayerUL.push_back(TempUL);
 		TempBlockLayerBR.push_back(TempBR);
 		TempBevelLayer.push_back(TempBevel);
@@ -77,12 +42,40 @@ void Mapbuilder::MapBuilderUI_Keys(MainWindow& wnd)
 	//////////////////////// <<<<<<<<<<<<< Fix make better !!!!!!
 	if (wnd.mouse.RightIsPressed())
 	{
-		TempULSet = false;
+		TempULSet = false; // clears top left vec of current block placment
 	}
 	if (wnd.mouse.LeftIsPressed() )
 	{		
 		Mouse_x = wnd.mouse.GetPosX();
 	    Mouse_y = wnd.mouse.GetPosY();
+		///////////////////////////
+		if (!Colourpallet &&
+			!blockBevelsize &&
+			MouseCatch &&
+			!TempULSet &&
+			Mouse_x > 0 &&
+			Mouse_x < Graphics::ScreenWidth &&
+			Mouse_y > 0 &&
+			Mouse_y < Graphics::ScreenHeight)
+		{
+			for (int i = 0; i < 1200; i++)
+			{
+				BackColourLayer[i];
+				BackBlockLayerUL[i];
+				BackBlockLayerBR[i];
+				BackBevelLayer[i];
+				if (Mouse_x > BackBlockLayerUL[i].x &&
+					Mouse_x < BackBlockLayerBR[i].x &&
+					Mouse_y > BackBlockLayerUL[i].y &&
+					Mouse_y < BackBlockLayerBR[i].y )
+				{
+					BackColourLayer.erase(BackColourLayer.begin() + i);
+					BackBlockLayerUL.erase(BackBlockLayerUL.begin() + i);
+					BackBlockLayerBR.erase(BackBlockLayerBR.begin() + i);
+					BackBevelLayer.erase(BackBevelLayer.begin() + i);
+				}
+			}
+		}
 	    ///////////////////////////
 		if (!Colourpallet &&
 			!blockBevelsize &&
@@ -121,8 +114,8 @@ void Mapbuilder::MapBuilderUI_Keys(MainWindow& wnd)
 		///////////////////////////
 		if (Mouse_x >= RedSet.x &&
 			Mouse_x <= RedSet.x + 20 &&
-			Mouse_y >= RedSet.y - 5 && 
-			Mouse_y <= RedSet.y + 25  &&
+			Mouse_y >= RedSet.y - 15 && 
+			Mouse_y <= RedSet.y + 35  &&
 			Colourpallet)
 		{
 			RedSet.y = (float)Mouse_y - 10; // centres to mouse
@@ -130,8 +123,8 @@ void Mapbuilder::MapBuilderUI_Keys(MainWindow& wnd)
 		///////////////////////////
 		if (Mouse_x >= GreenSet.x &&
 			Mouse_x <= GreenSet.x + 20 &&
-			Mouse_y >= GreenSet.y -5 &&
-			Mouse_y <= GreenSet.y + 25 &&
+			Mouse_y >= GreenSet.y -15 &&
+			Mouse_y <= GreenSet.y + 35 &&
 			Colourpallet)
 		{
 			GreenSet.y = (float)Mouse_y - 10; // centres to mouse
@@ -139,8 +132,8 @@ void Mapbuilder::MapBuilderUI_Keys(MainWindow& wnd)
 		///////////////////////////
 		if (Mouse_x >= BlueSet.x &&
 			Mouse_x <= BlueSet.x + 20 &&
-			Mouse_y >= BlueSet.y -5 &&
-			Mouse_y <= BlueSet.y + 25 &&
+			Mouse_y >= BlueSet.y -15 &&
+			Mouse_y <= BlueSet.y + 35 &&
 			Colourpallet)
 		{
 			BlueSet.y = (float)Mouse_y - 10; // centres to mouse
@@ -148,27 +141,31 @@ void Mapbuilder::MapBuilderUI_Keys(MainWindow& wnd)
 		///////////////////////////
 		if (Mouse_x >= Bevelset.x &&
 			Mouse_x <= Bevelset.x + 20 &&
-			Mouse_y >= Bevelset.y - 5 &&
-			Mouse_y <= Bevelset.y + 25 &&
+			Mouse_y >= Bevelset.y - 15 &&
+			Mouse_y <= Bevelset.y + 35 &&
 			blockBevelsize)
 		{
 			Bevelset.y = (float)Mouse_y - 10; // centres to mouse
 		}
-		else
+		
+		///////////////////////////
+	}
+	else
 		{			
 			MouseCatch = true;
-		}///////////////////////////
-	}
+		}
 }
 
 void Mapbuilder::MapBuilderUI_Graphics( Graphics& gfx)
 {
-	BaseBack(gfx);
+	BaseBackSet();
+	BaseBackDraw(gfx);
 	MapBuilder_TempLevel(gfx);
+	gfx.Drawrecbeveled(TempUL, TempBR, TempBevel, TempColour);
 	ColourPallet(gfx);
 	ColourSlider(gfx);
 	BevelSlider(gfx);
-	gfx.Drawrecbeveled(TempUL, TempBR, TempBevel, TempColour);
+	
 }
 
 void Mapbuilder::MapBuilder_TempLevel(Graphics & gfx)
@@ -195,33 +192,44 @@ void Mapbuilder::ColourSelect()
 	TempColour = selectedColour;
 }
 
-void Mapbuilder::BaseBack(Graphics & gfx)
+void Mapbuilder::BaseBackDraw(Graphics & gfx)
 {
-	Vec2 temp_A{ 0, 0 };
-	Vec2 temp_B{ 19,19 };
-	int index = 0;
-
-	///////////////////////////////////
-	unsigned char rM = 0u;
-	unsigned char gM = 0u;
-	unsigned char bM = 0u;
-	///////////////////////////////////
-	float rMod = 0;
-	float gMod = 0;
-	float bMod = 0;
-	///////////////////////////////////
-	///////////////////////////
-	for (int y = blockwidth; y <= Graphics::ScreenHeight; y += blockwidth)
+	if (BaseDraw)
 	{
-		for (int x = blockwidth; x <= Graphics::ScreenWidth; x += blockwidth)
+		for (int i = 0; i < 1200; i++)
 		{
-			gfx.Drawrecbeveled(temp_A, temp_B, 2, Color(rM , gM ,bM) );
-			temp_A.x = (float)x + 1;
-			temp_B.x = (float)x + blockwidth - 1;
-			index++;
-			if (index < 600)
+			gfx.Drawrecbeveled(BackBlockLayerUL[i], BackBlockLayerBR[i], BackBevelLayer[i], BackColourLayer[i]);
+		}
+	}
+}
+
+void Mapbuilder::BaseBackSet()
+{
+	if (BaseSet)
+	{
+		///////////////////////////////////
+		unsigned char rM = 0u;
+		unsigned char gM = 0u;
+		unsigned char bM = 0u;
+		///////////////////////////////////
+		float rMod = 0.f;
+		float gMod = 0.f;
+		float bMod = 0.f;
+		float x = 0.f;
+		float y = 0.f;
+		///////////////////////////////////
+		for (int i = 0; i < 1200; i++)
+		{
+			BackColourLayer.push_back({ rM,gM,bM });
+			BackBlockLayerUL.push_back({ x ,y });
+			BackBlockLayerBR.push_back({ x + 18 ,y + 18 });
+			BackBevelLayer.push_back(2);
+			////////////
+			rM = (unsigned char)rMod;
+			gM = (unsigned char)gMod;
+			bM = (unsigned char)bMod;
+			if (i < 600)
 			{
-			
 				rMod += r / 1000;
 				gMod += g / 1000;
 				bMod += b / 1000;
@@ -232,17 +240,18 @@ void Mapbuilder::BaseBack(Graphics & gfx)
 				gMod -= g / 1000;
 				bMod -= b / 1000;
 			}
-			rM = (unsigned char)rMod;
-			gM = (unsigned char)gMod;
-			bM = (unsigned char)bMod;
+			///////////
+			x += blockwidth ;
+			if (x + blockwidth > 800)
+			{
+				x = 0;
+				y += blockwidth ;
+			}
 		}
-		temp_A.y = (float)y + 1;
-		temp_B.y = (float)y + blockwidth - 1;
-		temp_A.x = 0.0f;
-		temp_B.x = (float)blockwidth - 1;
+		BaseDraw = true;
+		BaseSet = false;
 	}
 }
-
 
 void Mapbuilder::ColourPalletSet()
 {

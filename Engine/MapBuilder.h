@@ -15,7 +15,9 @@ public:
 	/////////////////////////
 private:
 	/////////////////////////
-	void BaseBack(class Graphics& gfx);
+	void BaseBackDraw(class Graphics& gfx);
+	void BaseBackSet();
+//	void DeleteBackBlock();
 	void ColourPalletSet();
 	void ColourSelect();	
 	void ColourPallet(class Graphics& gfx);
@@ -30,19 +32,22 @@ private:
 	int Mouse_y;
 	int ArrayGet = 0; 	
 	/////////////////////////
+	bool BaseSet = false;
+	bool BaseDraw = false;
 	bool Colourpallet = false;
 	bool blockBevelsize = false;
 	bool maskselect = false;
 	bool enemys = false;
 	bool powerups = false;
+	bool DeleteBack = false;
 	bool Grid = false;
 	bool ReturnCatch = false;
 	bool MouseCatch = false;
 	bool TempULSet = false;
 	////////////////////////
-	float r = 0;
-	float g = 0;
-	float b = 0;
+	float r = 20;
+	float g = 20;
+	float b = 20;
 	float BevelSize = 0;
 	////////////////////////
 	Color selectedColour;
@@ -67,6 +72,11 @@ private:
 	Vec2 TempBR{ 20 , 20 };
 	float TempBevel = 2;
 	Color TempColour;
+	///////////////////////
+	std::vector<Vec2> BackBlockLayerUL;
+	std::vector<Vec2> BackBlockLayerBR;
+	std::vector<Color> BackColourLayer;
+	std::vector<float> BackBevelLayer;
 	///////////////////////
 	std::vector<Vec2> TempBlockLayerUL;
 	std::vector<Vec2> TempBlockLayerBR;
