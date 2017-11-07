@@ -60,6 +60,8 @@ public:
 	~Graphics();
 	////////// my stuff ////////////
 public:
+	void DrawrecAligned(const class Vec2& PointA, const class Vec2& PointB, const float Width, Color c);
+	void DrawLine(Vec2& Start, Vec2& Finish, Color c);
 	void DrawRecFrame(const class Vec2& UL, const class Vec2& BR, Color c);
 	void Drawrec(const class Vec2& top_left,const class Vec2& bottom_right ,Color c );
 	void Drawrec(const float LT, const float RT, const float LB, const float RB , Color c);

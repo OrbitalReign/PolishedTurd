@@ -23,4 +23,5 @@ public:
 public:
 	float x;
 	float y;
+
 };

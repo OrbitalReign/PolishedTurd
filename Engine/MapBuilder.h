@@ -1,6 +1,7 @@
 #pragma once
 #include "Vec2.h"
 #include "Colors.h"
+#include "Collision.h"
 #include <assert.h>
 #include <vector>
 
@@ -25,6 +26,7 @@ private:
 	void BevelSlider(class Graphics& gfx);
 	/////////////////////////
 private:
+	Collision coltest;
 	/////////////////////////
 	int blockwidth = 20;
 	int ArrayWidth = 10;
@@ -43,15 +45,20 @@ private:
 	bool Grid = false;
 	bool ReturnCatch = false;
 	bool MouseCatch = false;
+	bool MouseRelease = false;
 	bool TempULSet = false;
+	bool PlaceBlock = false;
 	////////////////////////
 	float r = 20;
 	float g = 20;
 	float b = 20;
 	float BevelSize = 0;
 	////////////////////////
+	////////////////////////
 	Color selectedColour;
 	Color ColourPalletArray[100];
+	////////////////////////
+	Vec2 Mouse;
 	////////////////////////
 	// colour pallet start and block size
 	Vec2 UL{ 0.0f , 0.0f };
@@ -73,6 +80,7 @@ private:
 	float TempBevel = 2;
 	Color TempColour;
 	///////////////////////
+public:
 	std::vector<Vec2> BackBlockLayerUL;
 	std::vector<Vec2> BackBlockLayerBR;
 	std::vector<Color> BackColourLayer;

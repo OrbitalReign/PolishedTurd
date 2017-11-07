@@ -26,6 +26,8 @@
 #include "poo.h"
 #include "Level.h"
 #include "MapBuilder.h"
+#include "Collision.h"
+#include "Dude.h"
 
 
 class Game
@@ -40,7 +42,6 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
-	void DrawFace( int x,int y );
 	void DrawPoo( int x,int y );
 	void DrawGameOver( int x,int y );
 	void DrawTitleScreen( int x,int y );
@@ -64,6 +65,7 @@ private:
 	poo poo1;
 	poo poo2;
 	bool isStarted = false;
+	Dude Smiles;
 
 	Level Level1;
 	Level Level2;
@@ -74,8 +76,9 @@ private:
     Vec2 A;
 	Vec2 B;
 	Vec2 C;
+	Vec2 Dude;
 	////////////// map builder //////////////
-
+	Collision Collide;
 
 	/////////////////////////////////////////
 	/********************************/

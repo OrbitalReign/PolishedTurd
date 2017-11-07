@@ -308,6 +308,63 @@ void Graphics::BeginFrame()
 	memset( pSysBuffer,0u,sizeof( Color ) * Graphics::ScreenHeight * Graphics::ScreenWidth );
 }
 
+void Graphics::DrawrecAligned(const Vec2 & PointA, const Vec2 & PointB, const float Width, Color c)
+{
+	Vec2 A;
+	Vec2 B;
+	Vec2 C;
+	Vec2 D;
+	Vec2 Result;
+	double Radian;
+	float Calc_vx;
+	float Calc_vy;
+	{		
+	    Radian = (double)atan2(PointB.x - PointA.x, PointB.y - PointA.y);    // gets radians for trig function
+		Radian = Radian + 1.571; // minus 90 deg
+		Calc_vx = float(sin(Radian) * Width); // trig functions
+		Calc_vy = float(cos(Radian) * Width);
+		Result = { Calc_vx, Calc_vy };
+		A = PointA + Result;
+		C = PointB - Result;
+	}
+	{
+		Radian = (double)atan2(PointB.x - PointA.x, PointB.y - PointA.y);    // gets radians for trig function
+		Radian = Radian - 1.571; // plus 90 deg
+		Calc_vx = float(sin(Radian) * Width); // trig functions
+		Calc_vy = float(cos(Radian) * Width);
+		Result = { Calc_vx, Calc_vy };
+		B = PointA + Result;
+		D = PointB - Result;
+	}
+	
+	DrawPoly( A , B , C , c);
+	DrawPoly(A, C, D , c);
+	
+
+}
+
+void Graphics::DrawLine(Vec2 & Start, Vec2 & Finish, Color c)
+{
+	// gets the right angle triangle 
+	int dirived_x = int(Finish.x - Start.x);
+	int dirived_y = int(Finish.y - Start.y);
+	// gets the longest side of triangle in absolute for both sides 
+	int steps = abs(dirived_x) > abs(dirived_y) ? abs(dirived_x) : abs(dirived_y);
+	// sets x and y increments per loop by dividing by the steps for first set of lines;
+	float x_inc = dirived_x / float(steps);
+	float y_inc = dirived_y / float(steps);
+	float Line_x = Start.x;
+	float Line_y = Start.y;
+	////////////////////////////////
+	for (int i = 0; i < steps; i++)
+	{
+		PutPixel( (int)Line_x, (int)Line_y, c);
+		Line_x += x_inc;
+		Line_y += y_inc;
+	}
+	///////////////////////////////
+}
+
 void Graphics::DrawRecFrame(const Vec2 & UL, const Vec2 & BR, Color c)
 {
 	for (int y = (int)UL.y; y <= BR.y; y++)
