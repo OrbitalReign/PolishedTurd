@@ -66,7 +66,6 @@ void Game::UpdateModel()
 {
 //////// test /////
 	Smiles.Update ( wnd);
-
     //////////////////
 	if (isStarted)
 	{
@@ -28748,6 +28747,8 @@ void Game::ComposeFrame()
 	////////// test //////////
     Smiles.DrawFace(gfx);
 	Smiles.DrawBody(gfx);
+	Smiles.DrawGuns(gfx);
+	Smiles.DrawBullets(gfx);
 	////////////////////////////
 ////////// map builder //////////////////////
 	//MapEdit.MapBuilderUI_Graphics(gfx);

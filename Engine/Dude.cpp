@@ -1,12 +1,13 @@
 #include "Dude.h"
 #include "MainWindow.h"
 #include "Graphics.h"
+
 #include <cmath>
-#define PI 3.1415926536
 
 
 void Dude::Update( MainWindow& wnd)
 {
+	///////////////////////
 	if (wnd.kbd.KeyIsPressed('W'))
 	{
 		Base_y -= 2;
@@ -23,34 +24,21 @@ void Dude::Update( MainWindow& wnd)
 	{
 		Base_x += 2;
 	}
-
+	///////////////////////
 	Head = { (float)Base_x,(float)Base_y };
 	Neck = { (float)Base_x + 10, (float)Base_y + 20 };
 	FakeSholderLeft = { Head.x , Neck.y };
 	FakeSholderRight = { Head.x + 20, Neck.y };
 	Waist = { Neck.x , Neck.y + 20 };
-
-
-
 	///////////////////////
 	if (ScreenCheck.BoundsCheck(wnd.mouse.GetPosX(), wnd.mouse.GetPosY()))
 	{
-		Target = { (float)wnd.mouse.GetPosX() , (float)wnd.mouse.GetPosY() };
-		
-		if ( wnd.mouse.LeftIsPressed() )
-		{
-			Shooting();
-		}
-		else
-		{
-			RecoilLeft = 10;
-			RecoilRight = 10;
-		}
+		Target = { (float)wnd.mouse.GetPosX() , (float)wnd.mouse.GetPosY() };		
+		Fire = wnd.mouse.LeftIsPressed();
 	}
-	
-
 	///////////////////////	
 	Arms();
+	Shooting();
 	Jumping();
 	///////////////////////
 
@@ -380,39 +368,56 @@ void Dude::DrawFace(Graphics & gfx)
 void Dude::DrawBody(Graphics & gfx)
 {
 	////////////
-	gfx.DrawLine(Neck, ElboLeft, Colors::Gray); //leftarm
+	//gfx.DrawLine(Neck, ElboLeft, Colors::Gray); //leftarm
 	gfx.DrawrecAligned(Neck, ElboLeft, 1, Colors::Gray);// draws rec aligned with arm
 	////////////
-	gfx.DrawLine(Neck, ElboRight, Colors::Gray); //rightarm
+	//gfx.DrawLine(Neck, ElboRight, Colors::Gray); //rightarm
 	gfx.DrawrecAligned(Neck, ElboRight, 1, Colors::Gray);// draws rec aligned with arm
 	////////////
-	gfx.DrawLine(ElboLeft, HandLeft, Colors::Gray); //leftgun
-	gfx.DrawrecAligned(ElboLeft, HandLeft, 2, Colors::Blue);// draws rec aligned with arm
+	//gfx.DrawLine(ElboLeft, HandLeft, Colors::Gray); //leftgun	
 	////////////
-	gfx.DrawLine(ElboRight, HandRight, Colors::Gray); //Rightgun
-	gfx.DrawrecAligned(ElboRight, HandRight, 2, Colors::Blue);// draws rec aligned with arm
+	//gfx.DrawLine(ElboRight, HandRight, Colors::Gray); //Rightgun	
 	////////////
-	gfx.DrawLine(Neck, Waist, Colors::Gray);
-	gfx.DrawrecAligned(Neck, Waist, 1, Colors::Gray);// draws rec aligned with arm
+	//gfx.DrawLine(Neck, Waist, Colors::Gray); // torso
+	gfx.DrawrecAligned(Neck, Waist, 1, Colors::Gray);// draws rec aligned with torso
 	////////////
-	gfx.DrawLine(Waist, KneeLeft, Colors::Gray);
-	gfx.DrawrecAligned(Waist, KneeLeft, 1, Colors::Gray);// draws rec aligned with arm
+	//gfx.DrawLine(Waist, KneeLeft, Colors::Gray); // left thigh
+	gfx.DrawrecAligned(Waist, KneeLeft, 1, Colors::Gray);// draws rec aligned with thigh
 	////////////
-	gfx.DrawLine(Waist, KneeRight, Colors::Gray);
-	gfx.DrawrecAligned(Waist, KneeRight, 1, Colors::Gray);// draws rec aligned with arm
+	//gfx.DrawLine(Waist, KneeRight, Colors::Gray); // right thigh
+	gfx.DrawrecAligned(Waist, KneeRight, 1, Colors::Gray);// draws rec aligned with thigh
 	////////////
-	gfx.DrawLine(KneeLeft, FootLeft, Colors::Gray);
-	gfx.DrawrecAligned(KneeLeft, FootLeft, 1, Colors::Gray);// draws rec aligned with arm
+	//gfx.DrawLine(KneeLeft, FootLeft, Colors::Gray); // left shin
+	gfx.DrawrecAligned(KneeLeft, FootLeft, 1, Colors::Gray);// draws rec aligned with shin
 	////////////
-	gfx.DrawLine(KneeRight, FootRight, Colors::Gray);
-	gfx.DrawrecAligned(KneeRight, FootRight, 1, Colors::Gray);// draws rec aligned with arm
-	////////////
-
-	
+	//gfx.DrawLine(KneeRight, FootRight, Colors::Gray); // right shin
+	gfx.DrawrecAligned(KneeRight, FootRight, 1, Colors::Gray);// draws rec aligned with shin
+	////////////	
 }
 
 void Dude::DrawGuns(Graphics & gfx)
 {
+	gfx.DrawrecAligned(ElboLeft, HandLeft, 3, Colors::Purple);// draws rec aligned with arm
+	gfx.DrawrecAligned(ElboRight, HandRight, 3, Colors::Blue);// draws rec aligned with arm
+}
+
+void Dude::DrawBullets(Graphics & gfx)
+{	
+	Color Col{ 255, 200 , 0 };
+	for (int i = 0; i < Clipsize; i++)
+	{	
+		LeftClip[i].Location +=  LeftClip[i].Direction;
+		RightClip[i].Location +=  RightClip[i].Direction;
+
+		if (ScreenCheck.BoundsCheck(LeftClip[i].Location)) // checks is in screen
+		{
+			gfx.PutPixel((int)LeftClip[i].Location.x, (int)LeftClip[i].Location.y, Col);   // DrawBullet
+		}
+		if (ScreenCheck.BoundsCheck(RightClip[i].Location)) // Checks is in screen
+		{
+			gfx.PutPixel((int)RightClip[i].Location.x, (int)RightClip[i].Location.y, Col); 	// DrawBullet
+		}
+	}
 }
 
 void Dude::Running()
@@ -421,7 +426,7 @@ void Dude::Running()
 
 void Dude::Arms()
 {
-	///////////////////////	
+	//////////////
 	ElboLeft = FakeSholderLeft + TrigFunc((Target.x - FakeSholderLeft.x),(Target.y - FakeSholderLeft.y), RecoilLeft);	
 	ElboRight = FakeSholderRight + TrigFunc((Target.x - FakeSholderRight.x), (Target.y - FakeSholderRight.y), RecoilRight);
 	//////////////	
@@ -432,28 +437,86 @@ void Dude::Arms()
 
 void Dude::Jumping()
 {
+	//////////////
 	KneeLeft = Waist + TrigFunc( (Target.x - Waist.x) , ( Target.y - Waist.y) , 15 );
 	KneeRight = Waist + TrigFunc((Target.x + 40 - Waist.x), (Target.y + 40 - Waist.y), 15);
+	//////////////
 	FootLeft = { KneeLeft.x - 2 , KneeLeft.y + 10 };
 	FootRight = { KneeRight.x + 2 , KneeRight.y + 10 };
+	/////////////
 }
 
 void Dude::Shooting()
 {	
-	RecoilLeft += Modifier;
-	RecoilRight += Modifier;
-	if (RecoilLeft < 2)
+	
+	if (Fire)
 	{
-		Modifier = 1 ;
+		//////////////// gets bullets vector from hand
+		Vec2 LeftDirection = HandLeft - ElboLeft;
+		Vec2 RightDirection = HandRight - ElboRight;		
+		///////////////
+		RecoilLeft += Modifier_L;		//// first shot
+		///////////////
+		if (RecoilLeft < 1)
+		{
+			Modifier_L = 2;
+			SecondShot = true;
+		}
+		else if (RecoilLeft > 10)
+		{		
+			LeftClip[LeftClipPos].Direction = LeftDirection.Normalized() * LeftClip[LeftClipPos].Speed; // sets bullets vector
+			LeftClip[LeftClipPos].Location = HandLeft; // base location
+			Modifier_L = -4; // recoil
+			LeftClipPos++;
+		}
+		//////////////
+		if (SecondShot) RecoilRight += Modifier_R;  ///// second shot
+		//////////////
+		if (RecoilRight < 1 )
+		{
+			Modifier_R = 2;
+		}
+		else if (RecoilRight > 10 )
+		{ 		
+			RightClip[RightClipPos].Direction = RightDirection.Normalized() * RightClip[RightClipPos].Speed; // sets bullet vector
+			RightClip[RightClipPos].Location = HandRight; // base location
+			Modifier_R = -4;  // recoil
+			RightClipPos++;
+		}
+		////////////// 
 	}
-	else if (RecoilLeft > 10)
+	else
 	{
-		Modifier = -5; 
+		////////////// resets
+		RecoilLeft = 10;
+		RecoilRight = 10;
+		// guns move forward slightly first before firing first shot 
+		Modifier_R = 1;
+		Modifier_L = 1;
+		SecondShot = false;
 	}
+	/////////////////// Reload
+	
+	///// Add Timmer Function ////// <<<<<<<<<<<<<<<<<<<<
+
+	if (LeftClipPos >= Clipsize)
+	{
+		LeftClipPos = 0;
+	}
+	if (RightClipPos >= Clipsize)
+	{
+		RightClipPos = 0;
+	}
+	///////////////////
 }
 
 void Dude::Using()
 {
+}
+
+void Dude::ClipUpdate()
+{
+
 }
 
 Vec2 Dude::TrigFunc(float in_x , float in_y , int Hypotenuse)
@@ -464,6 +527,7 @@ Vec2 Dude::TrigFunc(float in_x , float in_y , int Hypotenuse)
 	Radian = (double)atan2(in_x , in_y );    // gets radians for trig function
 	Calc_vx = float(sin(Radian) * Hypotenuse); // trig functions
 	Calc_vy = float(cos(Radian) * Hypotenuse);
-	Vec2 Result{ Calc_vx, Calc_vy };
-	return Result;
+    return Vec2{ Calc_vx, Calc_vy };
+
 }
+

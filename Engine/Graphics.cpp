@@ -320,7 +320,7 @@ void Graphics::DrawrecAligned(const Vec2 & PointA, const Vec2 & PointB, const fl
 	float Calc_vy;
 	{		
 	    Radian = (double)atan2(PointB.x - PointA.x, PointB.y - PointA.y);    // gets radians for trig function
-		Radian = Radian + 1.571; // minus 90 deg
+		Radian = Radian + 1.571; // plus 90 deg
 		Calc_vx = float(sin(Radian) * Width); // trig functions
 		Calc_vy = float(cos(Radian) * Width);
 		Result = { Calc_vx, Calc_vy };
@@ -329,7 +329,7 @@ void Graphics::DrawrecAligned(const Vec2 & PointA, const Vec2 & PointB, const fl
 	}
 	{
 		Radian = (double)atan2(PointB.x - PointA.x, PointB.y - PointA.y);    // gets radians for trig function
-		Radian = Radian - 1.571; // plus 90 deg
+		Radian = Radian - 1.571; // minus 90 deg
 		Calc_vx = float(sin(Radian) * Width); // trig functions
 		Calc_vy = float(cos(Radian) * Width);
 		Result = { Calc_vx, Calc_vy };
@@ -337,8 +337,8 @@ void Graphics::DrawrecAligned(const Vec2 & PointA, const Vec2 & PointB, const fl
 		D = PointB - Result;
 	}
 	
-	DrawPoly( A , B , C , c);
-	DrawPoly(A, C, D , c);
+	DrawPoly( A , B , C , c );
+	DrawPoly( A , C , D , c );
 	
 
 }
