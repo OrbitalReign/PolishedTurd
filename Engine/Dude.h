@@ -14,6 +14,14 @@ public:
 	void DrawGuns(class Graphics& gfx);
 	void DrawBullets(class Graphics& gfx);
 	///////////////////
+	struct HitboxBounds
+	{
+		float Min_x = 0;
+		float Max_x = 0;
+		///////////////
+		float Min_y = 0;
+		float Max_y = 0;
+	};
 private:
 	/////////////////// animation
 	void Running();
@@ -22,6 +30,7 @@ private:
 	void Shooting();
 	void Using();
 	void ClipUpdate();
+	void HitBoxSet();
 	//////////////////
 	Vec2 TrigFunc(float in_x, float in_y, int Hypotenuse);
 private:
@@ -32,6 +41,10 @@ private:
 		Vec2 Direction{ 0,0 };
 		float Speed = 2.f;
 	};
+public:
+	////////////////// Hitbox
+	HitboxBounds HitBox;
+	/////////////////
 private:
 	////////////////// bools
 	bool Fire = false;
@@ -55,7 +68,7 @@ private:
 	Vec2 FootLeft;
 	Vec2 FootRight;
 	////////////////// body dims
-	int forearm = 15;
+	const int forearm = 15;
 	int RecoilLeft = 10;
 	int RecoilRight = 10;
 	/////////////////

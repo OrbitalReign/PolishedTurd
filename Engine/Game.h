@@ -76,7 +76,6 @@ private:
     Vec2 A;
 	Vec2 B;
 	Vec2 C;
-	Vec2 Dude;
 	////////////// map builder //////////////
 	Collision Collide;
 

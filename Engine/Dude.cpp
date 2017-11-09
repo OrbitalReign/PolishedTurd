@@ -1,8 +1,8 @@
 #include "Dude.h"
 #include "MainWindow.h"
 #include "Graphics.h"
-
 #include <cmath>
+
 
 
 void Dude::Update( MainWindow& wnd)
@@ -40,6 +40,7 @@ void Dude::Update( MainWindow& wnd)
 	Arms();
 	Shooting();
 	Jumping();
+	HitBoxSet();
 	///////////////////////
 
 }
@@ -517,6 +518,31 @@ void Dude::Using()
 void Dude::ClipUpdate()
 {
 
+}
+
+void Dude::HitBoxSet()
+{
+	// min max X
+	////////////////////// stacked Min 
+	HitBox.Min_x = std::min(std::min(std::min(Head.x,ElboLeft.x ),
+									 std::min(HandLeft.x ,HandRight.x)),
+									 std::min(std::min(KneeLeft.x, KneeRight.x),
+								     std::min(FootLeft.x, FootRight.x)));
+	///////////////////// stacked Max
+	HitBox.Max_x = std::max(std::max(std::max(Head.x +20 , ElboRight.x),
+								     std::max(HandLeft.x,HandRight.x )),
+									 std::max(std::min(KneeLeft.x, KneeRight.x),
+									 std::max(FootLeft.x, FootRight.x)));
+	// min max Y
+	///////////////////// stacked Min
+	HitBox.Min_y = std::min(std::min(std::min(Head.y, ElboLeft.y),
+								   	 std::min(HandLeft.y, HandRight.y)),
+									 std::min(std::min(KneeLeft.y, KneeRight.y),
+									 std::min(FootLeft.y, FootRight.y)));
+	///////////////////// stacked Max
+	HitBox.Max_y = std::max( Waist.y, std::max( std::max(KneeLeft.y, KneeRight.y),
+												std::max(FootLeft.y, FootRight.y)));
+									 
 }
 
 Vec2 Dude::TrigFunc(float in_x , float in_y , int Hypotenuse)

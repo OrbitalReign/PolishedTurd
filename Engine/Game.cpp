@@ -49,8 +49,6 @@ Game::Game( MainWindow& wnd )
 	poo1.vy = -1;
 	poo2.vx = 1;
 	poo2.vy = 1;
-	
-
 
 }
 
@@ -64,16 +62,14 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-//////// test /////
+	//////// test /////
 	Smiles.Update ( wnd);
     //////////////////
 	if (isStarted)
 	{
-	
-	Dude = { float(dudeX),(float)dudeY };
 	///////////////
 	
-
+	///////////////
 		dudeX = ClampScreenX( dudeX,dudeWidth );
 		dudeY = ClampScreenY( dudeY,dudeHeight );
 
